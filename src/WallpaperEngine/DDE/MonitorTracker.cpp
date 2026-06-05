@@ -12,6 +12,7 @@ MonitorTracker::MonitorTracker(QObject* parent) : QObject(parent) {
 
 void MonitorTracker::startTracking() {
     enumerateMonitors();
+    sLog.out("MonitorTracker: found ", m_monitors.size(), " monitor(s)");
     // Poll for changes every 2 seconds
     m_pollTimer.start(2000);
 }
@@ -71,8 +72,6 @@ void MonitorTracker::enumerateMonitors() {
         mon.height = crtc->height;
         mon.connected = true;
         newMonitors.push_back(mon);
-
-        sLog.out("Monitor: ", mon.name, " ", mon.x, "x", mon.y, ":", mon.width, "x", mon.height);
 
         XRRFreeCrtcInfo(crtc);
         XRRFreeOutputInfo(info);
