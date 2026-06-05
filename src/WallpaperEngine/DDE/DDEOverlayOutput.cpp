@@ -97,18 +97,17 @@ bool DDEOverlayOutput::createOverlayWindows() {
     return !m_windows.empty();
 }
 
-QVariantMap DDEOverlayOutput::getWindowGeometry(const std::string& monitor) const {
-    QVariantMap result;
+bool DDEOverlayOutput::getWindowGeometry(const std::string& monitor, WindowGeometry& geom) const {
     for (const auto& w : m_windows) {
         if (w.monitorName == monitor) {
-            result["x"] = w.x;
-            result["y"] = w.y;
-            result["width"] = w.width;
-            result["height"] = w.height;
-            return result;
+            geom.x = w.x;
+            geom.y = w.y;
+            geom.width = w.width;
+            geom.height = w.height;
+            return true;
         }
     }
-    return result;
+    return false;
 }
 
 void DDEOverlayOutput::reset() {}

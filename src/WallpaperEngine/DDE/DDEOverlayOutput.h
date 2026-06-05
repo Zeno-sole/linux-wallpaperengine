@@ -3,7 +3,7 @@
 #include "WallpaperEngine/Render/Drivers/Output/Output.h"
 #include "WallpaperEngine/Render/Drivers/Output/OutputViewport.h"
 #include <X11/Xlib.h>
-#include <QVariantMap>
+#include <string>
 #include <vector>
 
 namespace WallpaperEngine::DDE {
@@ -12,6 +12,10 @@ struct OverlayWindow {
     ::Window xwindow;
     std::string monitorName;
     int x, y, width, height;
+};
+
+struct WindowGeometry {
+    int x = 0, y = 0, width = 0, height = 0;
 };
 
 class DDEOverlayOutput : public WallpaperEngine::Render::Drivers::Output::Output {
@@ -29,7 +33,7 @@ public:
     void updateRender() const override;
 
     bool createOverlayWindows();
-    QVariantMap getWindowGeometry(const std::string& monitor) const;
+    bool getWindowGeometry(const std::string& monitor, WindowGeometry& geom) const;
 
 private:
     Display* m_display = nullptr;
