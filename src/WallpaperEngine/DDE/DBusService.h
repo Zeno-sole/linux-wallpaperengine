@@ -19,7 +19,7 @@ class DBusService : public QObject {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.deepin.wallpaperengine.Controller")
 public:
-    explicit DBusService(WallpaperEngine::Application::WallpaperApplication& app,
+    explicit DBusService(WallpaperEngine::Application::WallpaperApplication* app = nullptr,
                          QObject* parent = nullptr);
     ~DBusService() override;
 
@@ -68,7 +68,7 @@ signals:
 private:
     void connectWorkspaceSignals();
 
-    WallpaperEngine::Application::WallpaperApplication& m_app;
+    WallpaperEngine::Application::WallpaperApplication* m_app = nullptr;
     WorkspaceManager* m_workspaceManager = nullptr;
     MonitorTracker* m_monitorTracker = nullptr;
     bool m_isPaused = false;

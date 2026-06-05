@@ -1,5 +1,7 @@
 #include <csignal>
 #include <iostream>
+#include <string>
+#include <vector>
 
 #include "WallpaperEngine/Application/ApplicationContext.h"
 #include "WallpaperEngine/Application/WallpaperApplication.h"
@@ -29,7 +31,17 @@ void initLogging () {
 
 #ifdef ENABLE_DDE_PLUGIN
 int runDDEPlugin(int argc, char* argv[]) {
-    QCoreApplication qtApp(argc, argv);
+    // Filter out --dde-plugin from argv before passing to ApplicationContext
+    std::vector<char*> filteredArgv;
+    filteredArgv.push_back(argv[0]);
+    for (int i = 1; i < argc; i++) {
+        if (std::string(argv[i]) != "--dde-plugin") {
+            filteredArgv.push_back(argv[i]);
+        }
+    }
+    int filteredArgc = static_cast<int>(filteredArgv.size());
+
+    QCoreApplication qtApp(filteredArgc, filteredArgv.data());
 
     initLogging();
     sLog.out("Starting in DDE plugin mode");
@@ -44,13 +56,8 @@ int runDDEPlugin(int argc, char* argv[]) {
     WallpaperEngine::DDE::MonitorTracker monitorTracker;
     monitorTracker.startTracking();
 
-    // Create temporary WallpaperApplication (will be refined in later phases)
-    WallpaperEngine::Application::ApplicationContext appContext(argc, argv);
-    appContext.loadSettingsFromArgv();
-    app = new WallpaperEngine::Application::WallpaperApplication(appContext);
-
-    // Register DBus service
-    WallpaperEngine::DDE::DBusService dbusService(*app);
+    // Register DBus service (no WallpaperApplication needed in DDE mode)
+    WallpaperEngine::DDE::DBusService dbusService;
     dbusService.setWorkspaceManager(&workspaceMgr);
     dbusService.setMonitorTracker(&monitorTracker);
 
@@ -64,7 +71,6 @@ int runDDEPlugin(int argc, char* argv[]) {
 
     int ret = qtApp.exec();
 
-    delete app;
     return ret;
 }
 #endif

@@ -14,7 +14,7 @@ namespace WallpaperEngine::DDE {
 static const QString DBUS_SERVICE = "org.deepin.wallpaperengine";
 static const QString DBUS_PATH = "/org/deepin/wallpaperengine";
 
-DBusService::DBusService(WallpaperEngine::Application::WallpaperApplication& app,
+DBusService::DBusService(WallpaperEngine::Application::WallpaperApplication* app,
                          QObject* parent)
     : QObject(parent), m_app(app) {}
 
