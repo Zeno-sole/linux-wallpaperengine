@@ -1,0 +1,23 @@
+Source: wallpaperengine-plugin
+Section: utils
+Priority: optional
+Maintainer: Linux WallpaperEngine Team
+Build-Depends: debhelper-compat (= 13),
+               cmake (>= 3.16),
+               qt6-base-dev,
+               qt6-declarative-dev,
+               libdtk6-widget-dev,
+               dde-shell-frame-dev
+
+Package: wallpaperengine-plugin
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends},
+         linux-wallpaperengine (>= 0.5.0),
+         dde-shell (>= 1.99.0),
+         qt6-base,
+         qt6-declarative,
+         libdtk6-widget
+Description: DDE Wallpaper Engine Plugin
+ A dde-shell plugin that integrates linux-wallpaperengine into the
+ Deepin Desktop Environment, providing wallpaper management with
+ multi-workspace, multi-monitor, and lock screen support.

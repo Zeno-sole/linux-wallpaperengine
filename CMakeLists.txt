@@ -22,6 +22,9 @@ if(NOT ERRORONLY)
     set(ERRORONLY 0)
 endif()
 
+# DDE plugin support
+option(ENABLE_DDE_PLUGIN "Enable DDE plugin mode with DBus support" OFF)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-narrowing")
 
 find_package(X11)
@@ -36,6 +39,10 @@ find_package(LZ4 REQUIRED)
 find_package(FFMPEG REQUIRED)
 find_package(PulseAudio REQUIRED)
 find_package(Freetype REQUIRED)
+
+if(ENABLE_DDE_PLUGIN)
+    find_package(Qt6 REQUIRED COMPONENTS DBus)
+endif()
 
 set(ENABLE_OPT OFF)
 set(SPIRV_CROSS_FORCE_PIC ON)
@@ -524,6 +531,20 @@ set(COMMON_SOURCES
     src/WallpaperEngine/Maths.h
     src/WallpaperEngine/Maths.cpp)
 
+if(ENABLE_DDE_PLUGIN)
+    list(APPEND COMMON_SOURCES
+        src/WallpaperEngine/DDE/DBusService.cpp
+        src/WallpaperEngine/DDE/DBusService.h
+        src/WallpaperEngine/DDE/WorkspaceManager.cpp
+        src/WallpaperEngine/DDE/WorkspaceManager.h
+        src/WallpaperEngine/DDE/MonitorTracker.cpp
+        src/WallpaperEngine/DDE/MonitorTracker.h
+        src/WallpaperEngine/DDE/DDEOverlayOutput.cpp
+        src/WallpaperEngine/DDE/DDEOverlayOutput.h
+        src/WallpaperEngine/DDE/DDEConfigBridge.cpp
+        src/WallpaperEngine/DDE/DDEConfigBridge.h)
+endif()
+
 if(BUILD_TESTING)
     add_executable(
         tests
@@ -571,6 +592,11 @@ target_link_libraries (linux-wallpaperengine-lib PUBLIC
     libcef_dll_wrapper
     argparse
     qjs)
+
+if(ENABLE_DDE_PLUGIN)
+    target_compile_definitions(linux-wallpaperengine-lib PUBLIC ENABLE_DDE_PLUGIN)
+    target_link_libraries(linux-wallpaperengine-lib PUBLIC Qt6::DBus)
+endif()
 
 if (BUILD_TESTING)
     target_link_libraries (tests PRIVATE

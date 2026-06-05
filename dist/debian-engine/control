@@ -1,0 +1,29 @@
+Source: linux-wallpaperengine
+Section: utils
+Priority: optional
+Maintainer: Linux WallpaperEngine Team
+Build-Depends: debhelper-compat (= 13),
+               cmake (>= 3.12),
+               libgl-dev,
+               libglew-dev,
+               libsdl2-dev,
+               libmpv-dev,
+               libpulse-dev,
+               libavcodec-dev,
+               libavformat-dev,
+               libfreetype-dev,
+               zlib1g-dev,
+               liblz4-dev,
+               libx11-dev,
+               libxrandr-dev,
+               libxxf86vm-dev,
+               qt6-base-dev (optional),
+               libdbus-1-dev (optional)
+
+Package: linux-wallpaperengine
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Wallpaper Engine for Linux
+ A wallpaper rendering engine supporting Steam Workshop wallpapers
+ including scenes, videos, web pages, and images.
+ This package includes DDE plugin mode support (--dde-plugin).

@@ -1,0 +1,15 @@
+#!/bin/bash
+# Install main binary and library
+install -Dm755 output/linux-wallpaperengine \
+    debian/linux-wallpaperengine/usr/bin/linux-wallpaperengine
+install -Dm755 output/liblinux-wallpaperengine-lib.so \
+    debian/linux-wallpaperengine/usr/lib/linux-wallpaperengine/liblinux-wallpaperengine-lib.so
+
+# Install CEF resources
+cp -a output/icudtl.dat debian/linux-wallpaperengine/usr/lib/linux-wallpaperengine/
+cp -a output/v8_context_snapshot.bin debian/linux-wallpaperengine/usr/lib/linux-wallpaperengine/
+cp -a output/*.pak debian/linux-wallpaperengine/usr/lib/linux-wallpaperengine/
+
+# Install DBus service file
+install -Dm644 dist/dbus/org.deepin.wallpaperengine.service \
+    debian/linux-wallpaperengine/usr/share/dbus-1/services/org.deepin.wallpaperengine.service

@@ -1,0 +1,9 @@
+{
+  "Plugin": {
+    "Version": "1.0",
+    "Id": "org.deepin.ds.wallpaper-engine",
+    "Url": "main.qml",
+    "ContainmentType": "Applet",
+    "Category": "DDE"
+  }
+}

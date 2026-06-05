@@ -1,0 +1,18 @@
+#!/bin/bash
+# Install dde-shell plugin
+install -Dm755 debian/tmp/usr/lib/dde-shell/plugins/libds-wallpaper-engine.so \
+    debian/wallpaperengine-plugin/usr/lib/dde-shell/plugins/libds-wallpaper-engine.so
+
+# Install plugin resources
+install -Dm644 plugins/wallpaper-engine-proxy/metadata.json \
+    debian/wallpaperengine-plugin/usr/share/dde-shell/plugins/org.deepin.ds.wallpaper-engine/metadata.json
+install -Dm644 plugins/wallpaper-engine-proxy/main.qml \
+    debian/wallpaperengine-plugin/usr/share/dde-shell/plugins/org.deepin.ds.wallpaper-engine/main.qml
+install -Dm644 plugins/wallpaper-engine-proxy/TransitionOverlay.qml \
+    debian/wallpaperengine-plugin/usr/share/dde-shell/plugins/org.deepin.ds.wallpaper-engine/TransitionOverlay.qml
+install -Dm644 plugins/wallpaper-engine-proxy/SettingsDialog.qml \
+    debian/wallpaperengine-plugin/usr/share/dde-shell/plugins/org.deepin.ds.wallpaper-engine/SettingsDialog.qml
+
+# Install systemd service
+install -Dm644 dist/systemd/wallpaperengine.service \
+    debian/wallpaperengine-plugin/usr/lib/systemd/user/wallpaperengine.service

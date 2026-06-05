@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=org.deepin.wallpaperengine
+Exec=/usr/bin/linux-wallpaperengine --dde-plugin
+User=root
+SystemdService=wallpaperengine.service
