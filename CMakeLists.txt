@@ -24,6 +24,9 @@ endif()
 
 # DDE plugin support
 option(ENABLE_DDE_PLUGIN "Enable DDE plugin mode with DBus support" OFF)
+if(ENABLE_DDE_PLUGIN)
+    set(CMAKE_AUTOMOC ON)
+endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-narrowing")
 
