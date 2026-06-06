@@ -17,8 +17,8 @@ Build-Depends: debhelper-compat (= 13),
                libx11-dev,
                libxrandr-dev,
                libxxf86vm-dev,
-               qt6-base-dev (optional),
-               libdbus-1-dev (optional)
+               qt6-base-dev,
+               libdbus-1-dev
 
 Package: linux-wallpaperengine
 Architecture: any

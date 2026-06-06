@@ -1,0 +1,35 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	# Already configured in build/
+
+override_dh_auto_build:
+	# Already built in build/
+
+override_dh_auto_install:
+	mkdir -p debian/linux-wallpaperengine/usr/bin
+	mkdir -p debian/linux-wallpaperengine/usr/lib/linux-wallpaperengine
+	mkdir -p debian/linux-wallpaperengine/usr/share/dbus-1/services
+	install -Dm755 build/output/linux-wallpaperengine debian/linux-wallpaperengine/usr/bin/linux-wallpaperengine
+	install -Dm755 build/output/liblinux-wallpaperengine-lib.so debian/linux-wallpaperengine/usr/lib/linux-wallpaperengine/liblinux-wallpaperengine-lib.so
+	cp -a build/output/icudtl.dat debian/linux-wallpaperengine/usr/lib/linux-wallpaperengine/
+	cp -a build/output/v8_context_snapshot.bin debian/linux-wallpaperengine/usr/lib/linux-wallpaperengine/
+	cp -a build/output/*.pak debian/linux-wallpaperengine/usr/lib/linux-wallpaperengine/
+	# Copy bundled shared libraries
+	cp -a build/lib/libkissfft-float.so* debian/linux-wallpaperengine/usr/lib/linux-wallpaperengine/ 2>/dev/null || true
+	cp -a build/spirv-cross/output/libspirv-cross*.so* debian/linux-wallpaperengine/usr/lib/linux-wallpaperengine/ 2>/dev/null || true
+	install -Dm644 dist/dbus/org.deepin.wallpaperengine.service debian/linux-wallpaperengine/usr/share/dbus-1/services/org.deepin.wallpaperengine.service
+
+override_dh_shlibdeps:
+	dh_shlibdeps -ldebian/linux-wallpaperengine/usr/lib/linux-wallpaperengine --dpkg-shlibdeps-params=--ignore-missing-info
+
+override_dh_auto_test:
+	# Skip tests
+
+override_dh_strip:
+	dh_strip --no-automatic-dbgsym
