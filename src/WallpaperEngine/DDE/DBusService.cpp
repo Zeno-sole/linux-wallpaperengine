@@ -226,22 +226,22 @@ void DBusService::SwitchWorkspace(int workspace) {
 
 void DBusService::Pause() {
     m_isPaused = true;
-    // Send SIGSTOP to all engine processes
     for (auto* proc : m_engineProcesses) {
-        if (proc->state() == QProcess::Running) {
-            kill(proc->processId(), SIGSTOP);
+        if (proc->state() == QProcess::Running && proc->processId() > 0) {
+            ::kill(static_cast<pid_t>(proc->processId()), SIGSTOP);
         }
     }
+    sLog.out("Paused all engines");
 }
 
 void DBusService::Resume() {
     m_isPaused = false;
-    // Send SIGCONT to all engine processes
     for (auto* proc : m_engineProcesses) {
-        if (proc->state() == QProcess::Running) {
-            kill(proc->processId(), SIGCONT);
+        if (proc->state() == QProcess::Running && proc->processId() > 0) {
+            ::kill(static_cast<pid_t>(proc->processId()), SIGCONT);
         }
     }
+    sLog.out("Resumed all engines");
 }
 
 void DBusService::NextWallpaper(const QString& monitor) {
@@ -254,15 +254,7 @@ void DBusService::SetVolume(int volume) {
 
 void DBusService::SetFPS(int fps) {
     m_fps = std::clamp(fps, 1, 60);
-    // Restart engines with new FPS
-    for (auto it = m_engineProcesses.begin(); it != m_engineProcesses.end(); ++it) {
-        QString monitor = it.key();
-        QString wallpaper = GetWallpaper(monitor);
-        if (!wallpaper.isEmpty()) {
-            stopEngineProcess(monitor);
-            SetWallpaper(monitor, wallpaper);
-        }
-    }
+    sLog.out("FPS set to ", m_fps, " (will apply to new wallpapers)");
 }
 
 QString DBusService::GetStatus() {
