@@ -46,6 +46,14 @@ int runDDEPlugin(int argc, char* argv[]) {
     initLogging();
     sLog.out("Starting in DDE plugin mode");
 
+    // Ensure X11 session type for child processes
+    if (!getenv("XDG_SESSION_TYPE") || std::string(getenv("XDG_SESSION_TYPE")) == "tty") {
+        setenv("XDG_SESSION_TYPE", "x11", 1);
+    }
+    if (!getenv("DISPLAY")) {
+        setenv("DISPLAY", ":0", 1);
+    }
+
     // Initialize config path
     std::filesystem::path configPath = std::filesystem::path(getenv("HOME")) / ".config" / "wallpaperengine" / "config.json";
 

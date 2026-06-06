@@ -8,6 +8,7 @@
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <QFile>
+#include <QProcessEnvironment>
 #include <QStandardPaths>
 #include <algorithm>
 #include <csignal>
@@ -134,6 +135,17 @@ void DBusService::SetWallpaper(const QString& monitor, const QString& wallpaperP
 
     // Spawn engine subprocess
     QProcess* proc = new QProcess(this);
+
+    // Ensure X11 environment for the engine
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    if (!env.contains("DISPLAY")) {
+        env.insert("DISPLAY", ":0");
+    }
+    if (!env.contains("XDG_SESSION_TYPE") || env.value("XDG_SESSION_TYPE") == "tty") {
+        env.insert("XDG_SESSION_TYPE", "x11");
+    }
+    proc->setProcessEnvironment(env);
+
     connect(proc, &QProcess::readyReadStandardOutput, this, [this, monitor, proc]() {
         QString output = QString::fromUtf8(proc->readAllStandardOutput()).trimmed();
         if (!output.isEmpty()) {
