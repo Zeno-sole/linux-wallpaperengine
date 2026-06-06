@@ -4,6 +4,8 @@
 #include <QString>
 #include <QStringList>
 #include <QVariantMap>
+#include <QProcess>
+#include <QMap>
 #include <memory>
 
 namespace WallpaperEngine::Application {
@@ -67,10 +69,14 @@ signals:
 
 private:
     void connectWorkspaceSignals();
+    void stopEngineProcess(const QString& monitor);
+    void stopAllEngineProcesses();
+    QString findEngineBinary();
 
     WallpaperEngine::Application::WallpaperApplication* m_app = nullptr;
     WorkspaceManager* m_workspaceManager = nullptr;
     MonitorTracker* m_monitorTracker = nullptr;
+    QMap<QString, QProcess*> m_engineProcesses;
     bool m_isPaused = false;
     int m_volume = 30;
     int m_fps = 30;
